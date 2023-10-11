@@ -1,12 +1,11 @@
 <script>
   import ButtonComponent from './buttonComponent.svelte'
-  
-  export let count
+  import {count} from './store'
 </script>
 
 <div class="penal">
-  <h1>{count}</h1>
-  <ButtonComponent {count} on:increment />
+  <h1>{$count}</h1>
+  <ButtonComponent/>
 </div>
 
 <style>

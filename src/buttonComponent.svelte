@@ -1,10 +1,11 @@
 <script>
-  import {getContext} from 'svelte'
+  import {count} from './store'
 
-  let handleIncrement = getContext('incrementCount')
-  let count = getContext('count')
+  function handleIncrementCount() {
+    count.update(count => count + 1)
+  }
 </script>
   
-<button on:click={handleIncrement} >
-  increment count [{count}]
+<button on:click={handleIncrementCount} >
+  increment count [{$count}]
 </button>
