@@ -1,4 +1,5 @@
 <script>
+  
   import { onMount, onDestroy, beforeUpdate, afterUpdate, tick } from 'svelte'
 
   onMount(async() => {
@@ -10,7 +11,9 @@
   })
 
   beforeUpdate(async() => {
-    console.log('child beforeUpdate')
+    console.log('the component is about to update');
+    await tick();
+    console.log('the component just updated');  
   })
 
   afterUpdate(async() => {
