@@ -1,17 +1,10 @@
 <script>
-  import {createEventDispatcher} from 'svelte'
-  
-  const dispatch = createEventDispatcher()
-  
-  function handleIncrement(param) {
-    dispatch('increment', {
-      message: '값 증가 :' + param
-    })
-  }
-  
-  export let count
+  import {getContext} from 'svelte'
+
+  let handleIncrement = getContext('incrementCount')
+  let count = getContext('count')
 </script>
   
-<button on:click={() => handleIncrement(10)} >
+<button on:click={handleIncrement} >
   increment count [{count}]
 </button>
