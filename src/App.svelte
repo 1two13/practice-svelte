@@ -1,14 +1,12 @@
 <script>
-import Child from './child.svelte'
-
-let value = 0
-let carryValue = 12
-
-function handleValueAdd(event, param) {
-  value += param
-}
-</script>
-
-<p>value : {value}</p> 
-
-<Child {handleValueAdd} {carryValue} />
+  import PanelComponent from './panelComponent.svelte'
+  
+  let count = 10
+  
+  function incrementCount(event) {
+    console.log(event.detail.message)
+    count += 10
+  }
+  </script>
+  
+  <PanelComponent {count} on:increment={incrementCount}/>
