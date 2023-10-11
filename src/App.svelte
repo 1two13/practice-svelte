@@ -1,18 +1,17 @@
 <script>
-	let numbers = [
-		'own',
-		'two',
-		'three'
-	]
-	
-	let getNumbers = []
+  let selected = 0
 </script>
 
-{#each numbers as number}
-	<label>
-		<input type="checkbox" bind:group={getNumbers} value={number} /> 
-		{number}
-	</label>
-{/each}
+<h2>size</h2>
 
-{getNumbers}
+<label>
+  <input type='radio' bind:group={selected} value={1}>
+  One Scoop
+</label>
+
+<label>
+	<input type=radio bind:group={selected} value={2}>
+	Two scoops
+</label>
+
+<p>선택된 라이도 버튼: {selected} 번째</p>
