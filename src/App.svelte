@@ -1,9 +1,13 @@
 <script>
-  import CountComp from "./countComp.svelte"
-
-  let viewValue = 0
+  import Card from "./card.svelte";
 </script>
 
-<h2>{viewValue}</h2>
+<Card>
+  <span slot='name'>
+    heeju
+  </span>
 
-<CountComp bind:test={viewValue}/>
+  <span slot='address'>
+    incheon
+  </span>
+</Card>
