@@ -1,24 +1,14 @@
 <script>
-  let count = 0;
-  $: doubled = count * 2
+import Child from './child.svelte'
 
-  $: if(count >= 10) {
-    alert('카운트가 10을 넘었습니다.')
-    count = 9
-  }
-  
-  $: {
-	  console.log( count )
-	  console.log( doubled )
-  }
+let value = 0
+let carryValue = 12
 
-  function handleClick() {
-    count += 1;
-  }
+function handleValueAdd(event, param) {
+  value += param
+}
 </script>
 
-<button on:click={handleClick}>
-  클릭수 {count} {count === 1 ? 'time' : 'times'}
-</button>
+<p>value : {value}</p> 
 
-<p>{count} 두배는 {doubled}</p>
+<Child {handleValueAdd} {carryValue} />
