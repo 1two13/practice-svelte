@@ -1,10 +1,18 @@
 <script>
-	let boxChecked = false
+	let numbers = [
+		'own',
+		'two',
+		'three'
+	]
+	
+	let getNumbers = []
 </script>
 
-<label>
-	체크 박스 예제
-	<input type="checkbox" bind:checked="{boxChecked}">
-</label>
+{#each numbers as number}
+	<label>
+		<input type="checkbox" bind:group={getNumbers} value={number} /> 
+		{number}
+	</label>
+{/each}
 
-<button disabled={boxChecked} >전송</button>
+{getNumbers}
