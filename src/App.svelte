@@ -1,11 +1,10 @@
 <script>
-	let textValue = ''
-	
-	function clearText() {
-		textValue = ''
-	}
+	let boxChecked = false
 </script>
 
-<input type="text" bind:value="{textValue}" />
-<p> 입력값: {textValue} </p>
-<button on:click={clearText}>지우기</button>
+<label>
+	체크 박스 예제
+	<input type="checkbox" bind:checked="{boxChecked}">
+</label>
+
+<button disabled={boxChecked} >전송</button>
