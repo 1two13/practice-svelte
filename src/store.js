@@ -1,4 +1,4 @@
-import { writable } from 'svelte/store';
+import { derived, writable } from 'svelte/store';
 import { v4 as uuid } from 'uuid';
 import Constant from './constant';
 
@@ -125,5 +125,31 @@ function setTodoData() {
   };
 }
 
+function setFetchTodos() {
+  const fetch = derived(todos, ($todos) => {
+    if ($todos.viewMode === Constant.ACTIVE) {
+      return $todos.todoList.filter((todo) => todo.done === false);
+    }
+
+    if ($todos.viewMode === Constant.DONE) {
+      return $todos.todoLists.filter((todo) => todo.done === true);
+    }
+
+    return $todos.todoLists;
+  });
+
+  return fetch;
+}
+
+function setCountTodo() {
+  const count = derived(fetchTodos, ($fetchTodos) => {
+    return $fetchTodos.length;
+  });
+
+  return count;
+}
+
 export const todoForm = setTodoData();
-export const Todos = setTodoData();
+export const todos = setTodoData();
+export const fetchTodos = setFetchTodos();
+export const countTodo = setCountTodo();
