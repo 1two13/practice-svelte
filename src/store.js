@@ -1,9 +1,9 @@
-import { derived, writable } from 'svelte/store';
+import { writable, derived } from 'svelte/store';
 import { v4 as uuid } from 'uuid';
 import Constant from './constant';
 
 function setFormTodo() {
-  const todoValue = 'todo';
+  const todoValue = '';
 
   const { subscribe, update, set } = writable(todoValue);
 
@@ -23,7 +23,7 @@ function setFormTodo() {
 
 function setTodoData() {
   const todoData = {
-    todoList: [
+    todoLists: [
       {
         id: uuid(),
         content: '첫 번째 할일',
@@ -52,17 +52,20 @@ function setTodoData() {
   const { subscribe, update } = writable(todoData);
 
   const addTodo = (content) => {
-    const newTodo = {
-      id: uuid(),
-      content: content,
-      done: false,
-    };
+    if (content) {
+      const newTodo = {
+        id: uuid(),
+        content: content,
+        done: false,
+      };
 
-    update((datas) => {
-      const setData = [...datas.todoLists, newTodo];
-      datas.todoList = setData;
-      return datas;
-    });
+      update((datas) => {
+        const setData = [...datas.todoLists, newTodo];
+        datas.todoLists = setData;
+        return datas;
+      });
+      todoForm.resetForm();
+    }
   };
 
   const editTodo = (editTodo) => {
@@ -80,7 +83,7 @@ function setTodoData() {
 
   const removeTodo = (id) => {
     update((datas) => {
-      const setData = data.todoLists.filter((todo) => todo.id !== id);
+      const setData = datas.todoLists.filter((todo) => todo.id !== id);
       datas.todoLists = setData;
       return datas;
     });
@@ -88,13 +91,12 @@ function setTodoData() {
 
   const checkTodo = (id) => {
     update((datas) => {
-      const setData = data.todoLists.map((todo) => {
+      const setData = datas.todoLists.map((todo) => {
         if (todo.id === id) {
           todo.done = !todo.done;
         }
         return todo;
       });
-
       datas.todoLists = setData;
       return datas;
     });
@@ -114,6 +116,13 @@ function setTodoData() {
     });
   };
 
+  const closeTodoEditMode = () => {
+    update((datas) => {
+      datas.editMode = '';
+      return datas;
+    });
+  };
+
   return {
     subscribe,
     addTodo,
@@ -122,13 +131,14 @@ function setTodoData() {
     checkTodo,
     changeTodoEditMode,
     changeTodoView,
+    closeTodoEditMode,
   };
 }
 
 function setFetchTodos() {
   const fetch = derived(todos, ($todos) => {
     if ($todos.viewMode === Constant.ACTIVE) {
-      return $todos.todoList.filter((todo) => todo.done === false);
+      return $todos.todoLists.filter((todo) => todo.done === false);
     }
 
     if ($todos.viewMode === Constant.DONE) {
@@ -149,7 +159,7 @@ function setCountTodo() {
   return count;
 }
 
-export const todoForm = setTodoData();
+export const todoForm = setFormTodo();
 export const todos = setTodoData();
 export const fetchTodos = setFetchTodos();
 export const countTodo = setCountTodo();
