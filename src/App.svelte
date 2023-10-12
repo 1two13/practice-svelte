@@ -1,20 +1,106 @@
 <script>
-  let active
+  import {v4 as uuid} from 'uuid'
+  import Constant from './constant'
+
+  import TodoList from './components/TodoList.svelte'
+  import TodoHeader from './components/TodoHeader.svelte'
+  import TodoInfo from './components/TodoInfo.svelte'
+
+  let todoValue = ''
+  let editMode = ''
+  let viewMode = Constant.ALL
+
+  let todos = [
+    {
+      id: uuid(),
+      content: '첫 번째 할일',
+      done: false
+    },
+    {
+      id: uuid(),
+      content: '두 번째 할일',
+      done: false
+    },
+    {
+      id: uuid(),
+      content: '세 번째 할일',
+      done: true
+    },
+    {
+      id: uuid(),
+      content: '네 번째 할일',
+      done: false
+    }
+  ]
+
+  $: fetchTodos = todos
+  $: todoCount = fetchTodos.length
+
+  $: if(viewMode === Constant.ALL) {
+    fetchTodos =  todos
+  }
+
+  $: if(viewMode === Constant.ACTIVE) {
+    fetchTodos =  todos.filter(todo => todo.done === false)
+  }
+
+  $: if(viewMode === Constant.DONE) {
+    fetchTodos =  todos.filter(todo => todo.done === true)
+  }
+
+  function handleCheckTodo(id) {
+    todos = todos.map(todo => {
+      if(todo.id === id) {
+        todo.done = !todo.done
+      }
+      return todo
+    })
+  }
+
+  function handleTodoInputKeyup(event) {
+    if(event.keyCode === 13) {
+      addTodoItem()
+    }
+  }
+
+  function addTodoItem() {
+    if(todoValue) {
+      const newTodo = {
+        id: uuid(),
+        content: todoValue,
+        done: false
+      }
+      todos = [...todos, newTodo]
+      todoValue = ''
+    }
+  }
+
+  function handleChangeEditMode(id) {
+    editMode = id
+  }
+
+  function handleEditTodoItem(editTodo) {
+    todos = todos.map(todo => {
+      if(todo.id === editTodo.id) {
+        todo = editTodo
+      }
+      return todo
+    })
+    editMode = ''
+  }
+
+  function handleRemoveTodo(id) {
+    todos = todos.filter(todo => todo.id !== id)
+  }
+
+  function handleChangeViewMode(mode) {
+    viewMode = mode
+  }
+
 </script>
 
-<input type='checkbox' bind:checked={active} /> boarder size 
-
-<p class='box' class:checkBorder={active}>
-  Style Box
-</p>
-
-<style>
-	.box {
-		padding: 10px;
-		border: 1px solid #FF003A;
-	}
-
-	.checkBorder {
-		border: 5px solid #FF003A;
-	}
-</style>
+<div class='app'>
+  <TodoHeader bind:todoValue={todoValue} {handleTodoInputKeyup} />
+  <TodoInfo {todoCount} {handleChangeViewMode} {viewMode}/>
+  <TodoList {fetchTodos} {handleCheckTodo} {editMode} {handleChangeEditMode} {handleEditTodoItem} {handleRemoveTodo} />
+</div>
