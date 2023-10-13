@@ -5,6 +5,7 @@ import terser from '@rollup/plugin-terser';
 import resolve from '@rollup/plugin-node-resolve';
 import livereload from 'rollup-plugin-livereload';
 import css from 'rollup-plugin-css-only';
+import alias from '@rollup/plugin-alias';
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -28,6 +29,14 @@ function serve() {
     },
   };
 }
+
+const aliases = alias({
+  resolve: ['.svelte', '.js'], //optional, by default this will just look for .js files or folders
+  entries: [
+    { find: 'components', replacement: 'src/components' },
+    { find: '@', replacement: 'src' },
+  ],
+});
 
 export default {
   input: 'src/main.js',
@@ -75,4 +84,6 @@ export default {
   watch: {
     clearScreen: false,
   },
+
+  aliases,
 };
